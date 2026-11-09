@@ -148,9 +148,7 @@ jobs:
             echo "--- activity state ---"
             adb shell dumpsys activity activities | grep -i "ai.opennote.android" | head -5
             echo "--- fatal errors (must be empty) ---"
-            if grep -E "FATAL EXCEPTION|E AndroidRuntime" logcat.txt; then
-              echo "Fatal error in logcat"; exit 1
-            fi
+            if grep -E "FATAL EXCEPTION|E AndroidRuntime" logcat.txt; then echo "Fatal error in logcat"; exit 1; fi
             echo "No fatal errors."
 
       - name: Upload emulator evidence
