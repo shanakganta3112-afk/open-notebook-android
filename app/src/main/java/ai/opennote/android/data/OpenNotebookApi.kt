@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 /**
  * The subset of the Open Notebook REST API this client uses.
- * Routes mirror api/routers/*.py, all mounted under the /api prefix (api/main.py).
+ * Routes mirror the routers in api/routers, all mounted under the /api prefix (api/main.py).
  */
 interface OpenNotebookApi {
 

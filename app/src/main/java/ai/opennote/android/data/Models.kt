@@ -2,7 +2,10 @@ package ai.opennote.android.data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
 
 /** Shape of GET /api/notebooks (api/models.py NotebookResponse). */
 @Serializable
@@ -99,9 +102,8 @@ data class SearchHit(
         }
 
         private fun JsonObject.string(key: String): String? {
-            val element = this[key] ?: return null
-            val primitive = element as? kotlinx.serialization.json.JsonPrimitive ?: return null
-            if (primitive is kotlinx.serialization.json.JsonNull) return null
+            val primitive = this[key] as? JsonPrimitive ?: return null
+            if (primitive is JsonNull) return null
             return primitive.contentOrNull?.takeIf { it.isNotBlank() }
         }
     }

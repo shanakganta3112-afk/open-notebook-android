@@ -1,6 +1,6 @@
 package ai.opennote.android.data
 
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -44,7 +44,7 @@ class NotebookRepositoryTest {
     }
 
     @Test
-    fun `notebooks sends bearer token and parses the payload`() = runTest {
+    fun `notebooks sends bearer token and parses the payload`() = runBlocking {
         server.enqueue(
             jsonResponse(
                 """
@@ -70,7 +70,7 @@ class NotebookRepositoryTest {
     }
 
     @Test
-    fun `no authorization header when no password is set`() = runTest {
+    fun `no authorization header when no password is set`() = runBlocking {
         val anonymous = NotebookRepository.forSettings(
             ServerSettings(baseUrl = server.url("/").toString(), password = ""),
         )
@@ -82,7 +82,7 @@ class NotebookRepositoryTest {
     }
 
     @Test
-    fun `401 becomes a failure with an actionable message`() = runTest {
+    fun `401 becomes a failure with an actionable message`() = runBlocking {
         server.enqueue(jsonResponse("""{"detail":"Invalid password"}""", code = 401))
 
         val result = repository.notebooks()
@@ -93,7 +93,7 @@ class NotebookRepositoryTest {
     }
 
     @Test
-    fun `sources passes the notebook filter`() = runTest {
+    fun `sources passes the notebook filter`() = runBlocking {
         server.enqueue(
             jsonResponse(
                 """[{"id":"source:1","title":"Paper","embedded":true,"insights_count":4,
@@ -113,7 +113,7 @@ class NotebookRepositoryTest {
     }
 
     @Test
-    fun `addNote posts the notebook id`() = runTest {
+    fun `addNote posts the notebook id`() = runBlocking {
         server.enqueue(
             jsonResponse(
                 """{"id":"note:1","title":null,"content":"hello","note_type":"human",
@@ -133,7 +133,7 @@ class NotebookRepositoryTest {
     }
 
     @Test
-    fun `search maps loosely typed results into hits`() = runTest {
+    fun `search maps loosely typed results into hits`() = runBlocking {
         server.enqueue(
             jsonResponse(
                 """
@@ -159,7 +159,7 @@ class NotebookRepositoryTest {
     }
 
     @Test
-    fun `testConnection reports whether auth is enabled`() = runTest {
+    fun `testConnection reports whether auth is enabled`() = runBlocking {
         server.enqueue(jsonResponse("""{"auth_enabled":true,"message":"Authentication is required"}"""))
 
         val result = repository.testConnection()
